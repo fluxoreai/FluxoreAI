@@ -1,7 +1,7 @@
 # Backend API Endpoints Documentation
 
 **Version**: 1.0  
-**Base URL**: `http://api.fluxoreai.com/api` (or your domain)  
+**Base URL**: `https://api.fluxoreai.com/api` (or your domain)  
 **API Response Format**: All responses are JSON  
 
 ---

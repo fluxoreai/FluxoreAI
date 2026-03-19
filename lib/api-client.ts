@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://api.fluxoreai.com/api';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.fluxoreai.com/api';
 
 export const getAuthToken = () => {
   if (typeof window !== 'undefined') {
