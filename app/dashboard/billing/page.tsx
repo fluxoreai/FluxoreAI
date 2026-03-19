@@ -12,6 +12,7 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const [plans, setPlans] = useState<PricingPlan[]>([]);
+  const [payments, setPayments] = useState<any[]>([]);
   
   useEffect(() => {
     let mounted = true;
@@ -31,9 +32,15 @@ export default function BillingPage() {
           setPlans(planResp.data.map((p: any) => ({
             id: p.id,
             name: p.name,
-            monthlyPrice: parseFloat(p.price_monthly),
+            monthlyPrice: parseFloat(p.price || p.price_monthly || "0"),
             features: p.features || []
           })));
+        }
+
+        // Fetch real billing history
+        const paymentsResp = await paymentsApi.getPayments({ limit: 5 });
+        if (mounted && paymentsResp?.data) {
+          setPayments(paymentsResp.data);
         }
       } catch (e) {
         console.error("Failed to load billing data", e);
@@ -153,17 +160,23 @@ export default function BillingPage() {
               <Zap className="w-4 h-4 text-yellow-400" /> Billing History
             </h3>
             <div className="space-y-3">
-              {[
-                { date: 'Dec 12, 2025', amount: '$49.00', status: 'Paid' },
-                { date: 'Nov 12, 2025', amount: '$49.00', status: 'Paid' },
-              ].map((inv, i) => (
-                <div key={i} className="flex items-center justify-between text-sm">
-                  <span className="text-zinc-500 font-mono text-xs">{inv.date}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-white">{inv.amount}</span>
+              {payments.length > 0 ? (
+                payments.map((inv, i) => (
+                  <div key={i} className="flex items-center justify-between text-sm">
+                    <span className="text-zinc-500 font-mono text-xs">
+                      {new Date(inv.created_at).toLocaleDateString()}
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-white">${inv.amount}</span>
+                      <span className={`text-[9px] uppercase font-bold ${inv.status === 'successful' ? 'text-green-500' : 'text-red-500'}`}>
+                        {inv.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-zinc-600 text-xs font-mono">No transaction history detected.</p>
+              )}
             </div>
           </div>
         </div>

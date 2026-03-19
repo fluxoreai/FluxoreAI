@@ -1,5 +1,27 @@
 import { fetchApi } from '../api-client';
 
+export interface PaymentMethod {
+  card_number: string;
+  expiry_month: string;
+  expiry_year: string;
+  cvv: string;
+  card_holder: string;
+}
+
+export interface BillingAddress {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
+export interface SubscriptionRequest {
+  plan_slug: string;
+  payment_method: PaymentMethod;
+  billing_address: BillingAddress;
+}
+
 export const paymentsApi = {
   getSubscriptionPlans: async () => {
     try {
@@ -47,7 +69,7 @@ export const paymentsApi = {
     }
   },
 
-  subscribe: async (data: any) => {
+  subscribe: async (data: SubscriptionRequest) => {
     return fetchApi('/subscriptions', {
       method: 'POST',
       body: JSON.stringify(data)
@@ -59,5 +81,10 @@ export const paymentsApi = {
       method: 'POST',
       body: JSON.stringify(data)
     });
+  },
+
+  getPayments: async (params?: { status?: string; limit?: number; offset?: number }) => {
+    const query = params ? `?${new URLSearchParams(params as any).toString()}` : '';
+    return fetchApi(`/payments${query}`, { method: 'GET' });
   }
 };

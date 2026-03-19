@@ -30,6 +30,20 @@ function CheckoutContent() {
   const [password, setPassword] = useState('');
   const [planDetails, setPlanDetails] = useState<PricingPlan | null>(null);
 
+  // Payment Details
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiryMonth, setExpiryMonth] = useState('');
+  const [expiryYear, setExpiryYear] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+
+  // Billing Address
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [stateAddress, setStateAddress] = useState('');
+  const [zip, setZip] = useState('');
+  const [country, setCountry] = useState('USA');
+
   useEffect(() => {
     let mounted = true;
 
@@ -114,7 +128,23 @@ function CheckoutContent() {
       // 2. Subscribe to plan
       if (!planDetails) throw new Error("Missing plan details");
 
-      await paymentsApi.subscribe({ plan_id: planDetails.id });
+      await paymentsApi.subscribe({
+        plan_slug: planDetails.slug,
+        payment_method: {
+          card_number: cardNumber,
+          expiry_month: expiryMonth,
+          expiry_year: expiryYear,
+          cvv,
+          card_holder: cardHolder
+        },
+        billing_address: {
+          street,
+          city,
+          state: stateAddress,
+          zip,
+          country
+        }
+      });
 
       setSuccess('Subscription activated successfully! Redirecting to dashboard...');
       setTimeout(() => {
@@ -226,6 +256,78 @@ function CheckoutContent() {
                   </div>
                 </div>
               )}
+
+              <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-8 space-y-6 shadow-2xl">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tighter flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-yellow-400" /> Payment Details
+                  </h2>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Card Number</label>
+                    <input required type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="4111 1111 1111 1111" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Expiry (MM/YY)</label>
+                      <div className="flex gap-2">
+                        <input required type="text" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value.slice(0, 2))} placeholder="MM" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white text-center" />
+                        <span className="text-zinc-600 flex items-center">/</span>
+                        <input required type="text" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value.slice(0, 2))} placeholder="YY" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white text-center" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">CVV</label>
+                      <input required type="text" value={cvv} onChange={(e) => setCvv(e.target.value)} placeholder="123" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Card Holder</label>
+                    <input required type="text" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} placeholder="Name on card" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-8 space-y-6 shadow-2xl">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tighter flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-yellow-400" /> Billing Address
+                  </h2>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Street Address</label>
+                    <input required type="text" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="123 Main St" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">City</label>
+                      <input required type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">State/Province</label>
+                      <input required type="text" value={stateAddress} onChange={(e) => setStateAddress(e.target.value)} placeholder="State" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">ZIP / Postal Code</label>
+                      <input required type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="10001" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Country</label>
+                      <input required type="text" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="USA" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <button
                 type="submit"
