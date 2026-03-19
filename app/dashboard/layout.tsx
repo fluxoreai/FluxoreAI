@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   GitMerge, 
@@ -15,7 +15,8 @@ import {
   Bell,
   Search,
   Server,
-  CreditCard
+  CreditCard,
+  LogOut
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AuthGuard from '@/components/auth-guard';
@@ -28,6 +29,7 @@ const navItems = [
   { name: 'Automations', icon: Zap, href: '/dashboard/automations' },
   { name: 'Infrastructure', icon: Server, href: '/dashboard/infrastructure' },
   { name: 'Billing & Plans', icon: CreditCard, href: '/dashboard/billing' },
+  { name: 'Profile', icon: User, href: '/dashboard/profile' },
 ];
 
 export default function DashboardLayout({
@@ -36,7 +38,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [userProfile, setUserProfile] = React.useState<any>(null);
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -53,6 +57,18 @@ export default function DashboardLayout({
     fetchUser();
     return () => { mounted = false; };
   }, []);
+  
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await authApi.logout();
+      router.push('/login');
+    } catch (e) {
+      console.error('Logout failed', e);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-black text-white">
@@ -126,22 +142,31 @@ export default function DashboardLayout({
               />
             </div>
             
-            <button className="relative p-2 text-zinc-400 hover:text-white transition-colors">
+            <button className="relative p-2 text-zinc-400 hover:text-white transition-colors" title="Notifications">
               <Bell className="w-5 h-5" />
               <div className="absolute top-2 right-2 w-2 h-2 bg-yellow-400 rounded-full border-2 border-black" />
+            </button>
+
+            <button 
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="relative p-2 text-zinc-400 hover:text-red-400 transition-colors disabled:opacity-50"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
             </button>
 
             <div className="flex items-center space-x-3 pl-4 border-l border-zinc-800">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-semibold text-white">
-                  {userProfile?.name || userProfile?.email?.split('@')[0] || 'User'}
+                  {userProfile?.first_name ? `${userProfile.first_name} ${userProfile.last_name || ''}` : (userProfile?.email?.split('@')[0] || 'User')}
                 </p>
                 <p className="text-[10px] font-mono text-zinc-500">{userProfile?.email || 'Loading...'}</p>
               </div>
               <Avatar className="h-8 w-8 border border-zinc-800">
                 <AvatarImage src="" />
                 <AvatarFallback className="bg-zinc-800 text-yellow-400 text-xs font-bold uppercase">
-                  {(userProfile?.name || userProfile?.email || 'U').substring(0, 2)}
+                  {(userProfile?.first_name || userProfile?.email || 'U').substring(0, 2)}
                 </AvatarFallback>
               </Avatar>
             </div>
