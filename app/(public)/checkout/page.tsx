@@ -111,14 +111,14 @@ function CheckoutContent() {
         if (!executeRecaptcha) {
           throw new Error("ReCAPTCHA not ready");
         }
-        const captchaToken = await executeRecaptcha('checkout_register');
+        const turnstile_token = await executeRecaptcha('checkout_register');
 
         await authApi.register({
           username,
           email,
           password_hash: password,
           password_hash_confirmation: password,
-          captchaToken
+          turnstile_token
         });
 
         // Logged in now

@@ -103,12 +103,12 @@ function ContactForm() {
     setError('');
     
     try {
-      const captchaToken = await executeRecaptcha('support_contact');
+      const turnstile_token = await executeRecaptcha('support_contact');
       await mailApi.submitContactForm({ 
         name, 
         email, 
         message: `Subject: ${subject}\n\n${message}`, 
-        captchaToken 
+        turnstile_token 
       });
       setIsSuccess(true);
       setName('');

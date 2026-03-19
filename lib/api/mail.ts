@@ -2,14 +2,9 @@ import { fetchApi } from '../api-client';
 
 export const mailApi = {
   submitContactForm: async (data: any) => {
-    const payload: any = { ...data };
-    if (payload.captchaToken) {
-      payload.recaptcha_token = payload.captchaToken;
-      delete payload.captchaToken;
-    }
     return fetchApi('/mail/contact', {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(data)
     });
   },
 
