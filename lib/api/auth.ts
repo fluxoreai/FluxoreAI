@@ -3,7 +3,7 @@ import { fetchApi, setAuthToken, removeAuthToken } from '../api-client';
 export interface LoginCredentials {
   email: string;
   password_hash: string;
-  turnstile_token?: string;
+  captchaToken?: string;
 }
 
 export interface RegisterData {
@@ -13,14 +13,19 @@ export interface RegisterData {
   email: string;
   password_hash: string;
   password_hash_confirmation: string;
-  turnstile_token?: string;
+  captchaToken?: string;
 }
 
 export const authApi = {
   login: async (credentials: LoginCredentials) => {
+    const payload: any = { ...credentials };
+    if (payload.captchaToken) {
+      payload.turnstile_token = payload.captchaToken;
+      delete payload.captchaToken;
+    }
     const response = await fetchApi('/auth/login', {
       method: 'POST',
-      body: JSON.stringify(credentials)
+      body: JSON.stringify(payload)
     });
     if (response?.data?.token) {
       setAuthToken(response.data.token);
@@ -29,9 +34,14 @@ export const authApi = {
   },
   
   register: async (userData: RegisterData) => {
+    const payload: any = { ...userData };
+    if (payload.captchaToken) {
+      payload.turnstile_token = payload.captchaToken;
+      delete payload.captchaToken;
+    }
     const response = await fetchApi('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(userData)
+      body: JSON.stringify(payload)
     });
     if (response?.data?.token) {
       setAuthToken(response.data.token);

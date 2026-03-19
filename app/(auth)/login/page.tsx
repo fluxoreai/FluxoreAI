@@ -70,8 +70,8 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      const turnstile_token = await executeRecaptcha('login');
-      await authApi.login({ email, password_hash: password, turnstile_token });
+      const captchaToken = await executeRecaptcha('login');
+      await authApi.login({ email, password_hash: password, captchaToken });
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Login failed');

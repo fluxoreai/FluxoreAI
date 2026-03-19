@@ -51,13 +51,13 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const turnstile_token = await executeRecaptcha('signup');
+      const captchaToken = await executeRecaptcha('signup');
       await authApi.register({ 
         username,
         email, 
         password_hash: password, 
         password_hash_confirmation: password,
-        turnstile_token 
+        captchaToken 
       });
       router.push('/dashboard');
     } catch (err: any) {

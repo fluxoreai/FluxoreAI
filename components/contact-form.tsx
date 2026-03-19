@@ -45,8 +45,8 @@ export const ContactForm = () => {
     setStatus({ type: '', text: '' });
 
     try {
-      const turnstile_token = await executeRecaptcha('contact_form');
-      await mailApi.submitContactForm({ name, email, message, turnstile_token });
+      const captchaToken = await executeRecaptcha('contact_form');
+      await mailApi.submitContactForm({ name, email, message, captchaToken });
       setStatus({ type: 'success', text: 'Message sent successfully! We will get back to you soon.' });
       // Reset form
       setName('');
