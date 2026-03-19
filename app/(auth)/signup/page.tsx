@@ -15,6 +15,7 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api/auth';
+import { API_URL } from '@/lib/api-client';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function SignupPage() {
@@ -66,6 +67,10 @@ export default function SignupPage() {
     }
   };
 
+  const handleSocialLogin = (provider: 'google' | 'github') => {
+    window.location.href = `${API_URL}/auth/${provider}/redirect`;
+  };
+
   return (
     <main className="min-h-screen bg-black flex items-center justify-center p-6 relative overflow-hidden selection:bg-yellow-400 selection:text-black">
       
@@ -113,11 +118,19 @@ export default function SignupPage() {
 
           {/* Social Auth */}
           <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-center gap-3 bg-zinc-900 border border-zinc-800 py-4 rounded-2xl hover:bg-zinc-800 transition-all group">
+            <button 
+              type="button"
+              onClick={() => handleSocialLogin('google')}
+              className="flex items-center justify-center gap-3 bg-zinc-900 border border-zinc-800 py-4 rounded-2xl hover:bg-zinc-800 transition-all group"
+            >
               <Chrome className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
               <span className="text-xs font-bold text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest">Google</span>
             </button>
-            <button className="flex items-center justify-center gap-3 bg-zinc-900 border border-zinc-800 py-4 rounded-2xl hover:bg-zinc-800 transition-all group">
+            <button 
+              type="button"
+              onClick={() => handleSocialLogin('github')}
+              className="flex items-center justify-center gap-3 bg-zinc-900 border border-zinc-800 py-4 rounded-2xl hover:bg-zinc-800 transition-all group"
+            >
               <Github className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
               <span className="text-xs font-bold text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest">GitHub</span>
             </button>

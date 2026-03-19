@@ -3,6 +3,7 @@ import { fetchApi, setAuthToken, removeAuthToken } from '../api-client';
 export interface LoginCredentials {
   email: string;
   password_hash: string;
+  turnstile_token?: string;
 }
 
 export interface RegisterData {

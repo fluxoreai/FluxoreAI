@@ -19,6 +19,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { authApi } from '@/lib/api/auth';
+import { API_URL } from '@/lib/api-client';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const logMessages = [
   'Node #402 Authenticated...',
@@ -40,6 +42,7 @@ const chartData = [
 ];
 
 export default function LoginPage() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const router = useRouter();
   const [logs, setLogs] = useState<string[]>([]);
   const [logIndex, setLogIndex] = useState(0);
@@ -59,16 +62,26 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!executeRecaptcha) {
+      setError('ReCAPTCHA not ready');
+      return;
+    }
+    
     setError('');
     setLoading(true);
     try {
-      await authApi.login({ email, password_hash: password });
+      const turnstile_token = await executeRecaptcha('login');
+      await authApi.login({ email, password_hash: password, turnstile_token });
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSocialLogin = (provider: 'google' | 'github') => {
+    window.location.href = `${API_URL}/auth/${provider}/redirect`;
   };
 
   return (
@@ -235,11 +248,19 @@ export default function LoginPage() {
 
             {/* Social Auth */}
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 bg-zinc-900/50 border border-zinc-800 py-3 rounded-xl hover:bg-zinc-800 transition-all group">
+              <button 
+                type="button"
+                onClick={() => handleSocialLogin('google')}
+                className="flex items-center justify-center gap-3 bg-zinc-900/50 border border-zinc-800 py-3 rounded-xl hover:bg-zinc-800 transition-all group"
+              >
                 <Chrome className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
                 <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest">Google</span>
               </button>
-              <button className="flex items-center justify-center gap-3 bg-zinc-900/50 border border-zinc-800 py-3 rounded-xl hover:bg-zinc-800 transition-all group">
+              <button 
+                type="button"
+                onClick={() => handleSocialLogin('github')}
+                className="flex items-center justify-center gap-3 bg-zinc-900/50 border border-zinc-800 py-3 rounded-xl hover:bg-zinc-800 transition-all group"
+              >
                 <Github className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
                 <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest">GitHub</span>
               </button>

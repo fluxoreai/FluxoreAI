@@ -17,6 +17,8 @@ import {
 import Image from 'next/image';
 import { aiApi } from '@/lib/api/ai';
 import { mapsApi } from '@/lib/api/maps';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { mailApi } from '@/lib/api/mail';
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. INFRASTRUCTURE MAP COMPONENT (JET-BLACK CUSTOM SVG)
@@ -81,17 +83,43 @@ function InfrastructureMap() {
    2. CONTACT FORM COMPONENT
    ────────────────────────────────────────────────────────────────────────── */
 function ContactForm() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('Technical Implementation');
+  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!executeRecaptcha) {
+      setError('ReCAPTCHA not ready');
+      return;
+    }
+
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setError('');
+    
+    try {
+      const turnstile_token = await executeRecaptcha('support_contact');
+      await mailApi.submitContactForm({ 
+        name, 
+        email, 
+        message: `Subject: ${subject}\n\n${message}`, 
+        turnstile_token 
+      });
       setIsSuccess(true);
+      setName('');
+      setEmail('');
+      setMessage('');
       setTimeout(() => setIsSuccess(false), 3000);
-    }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -104,12 +132,15 @@ function ContactForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && <div className="text-red-500 text-xs font-mono text-center">{error}</div>}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest px-1">Commander Name</label>
             <input
               required
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Username"
               className="w-full bg-zinc-950 border border-zinc-900 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400/50 focus:ring-1 focus:ring-yellow-400/20 transition-all placeholder:text-zinc-800"
             />
@@ -119,6 +150,8 @@ function ContactForm() {
             <input
               required
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="[EMAIL_ADDRESS]"
               className="w-full bg-zinc-950 border border-zinc-900 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400/50 focus:ring-1 focus:ring-yellow-400/20 transition-all placeholder:text-zinc-800"
             />
@@ -127,7 +160,11 @@ function ContactForm() {
 
         <div className="space-y-2">
           <label className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest px-1">Issue Subject</label>
-          <select className="w-full bg-zinc-950 border border-zinc-900 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400/50 transition-all appearance-none cursor-pointer">
+          <select 
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            className="w-full bg-zinc-950 border border-zinc-900 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400/50 transition-all appearance-none cursor-pointer"
+          >
             <option className="bg-zinc-950">Technical Implementation</option>
             <option className="bg-zinc-950">Neural Grid Synchronization</option>
             <option className="bg-zinc-950">Billing & Account</option>
@@ -140,6 +177,8 @@ function ContactForm() {
           <textarea
             required
             rows={5}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             placeholder="Describe the technical friction..."
             className="w-full bg-zinc-950 border border-zinc-900 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400/50 focus:ring-1 focus:ring-yellow-400/20 transition-all placeholder:text-zinc-800 resize-none"
           />
@@ -280,7 +319,7 @@ function SupportAIChat() {
   const hasStarted = messages.length > 0;
 
   return (
-    <div className="max-w-4xl mx-auto w-full flex flex-col h-[600px] bg-zinc-950/50 border border-zinc-900 rounded-[2rem] overflow-hidden shadow-2xl relative z-10">
+    <div className="max-w-4xl mx-auto w-full flex flex-col h-[600px] bg-zinc-950/50 border border-zinc-900 rounded-4xl overflow-hidden shadow-2xl relative z-10">
 
       {/* Header with New Chat Button */}
       <div className="px-8 py-4 border-b border-zinc-900 flex items-center justify-between bg-zinc-950/80 backdrop-blur-md z-20">
