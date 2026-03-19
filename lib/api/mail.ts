@@ -4,7 +4,7 @@ export const mailApi = {
   submitContactForm: async (data: any) => {
     const payload: any = { ...data };
     if (payload.captchaToken) {
-      payload.turnstile_token = payload.captchaToken;
+      payload.recaptcha_token = payload.captchaToken;
       delete payload.captchaToken;
     }
     return fetchApi('/mail/contact', {

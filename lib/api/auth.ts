@@ -20,7 +20,7 @@ export const authApi = {
   login: async (credentials: LoginCredentials) => {
     const payload: any = { ...credentials };
     if (payload.captchaToken) {
-      payload.turnstile_token = payload.captchaToken;
+      payload.recaptcha_token = payload.captchaToken;
       delete payload.captchaToken;
     }
     const response = await fetchApi('/auth/login', {
@@ -36,7 +36,7 @@ export const authApi = {
   register: async (userData: RegisterData) => {
     const payload: any = { ...userData };
     if (payload.captchaToken) {
-      payload.turnstile_token = payload.captchaToken;
+      payload.recaptcha_token = payload.captchaToken;
       delete payload.captchaToken;
     }
     const response = await fetchApi('/auth/register', {
