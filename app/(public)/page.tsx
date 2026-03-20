@@ -78,7 +78,7 @@ export default function Home() {
             <span className="inline-block px-4 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-mono text-yellow-400 uppercase tracking-widest">
               FluxOps V2.1.0 IS NOW LIVE
             </span>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
+            <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9]">
               SMART WORKFLOW<br />
               <span className="text-yellow-400">IN ACTION.</span>
             </h1>
@@ -138,7 +138,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="sticky top-32"
+            className="relative md:sticky md:top-32 mb-12 md:mb-0"
           >
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white leading-tight">
               FROM STATIC<br />
@@ -187,7 +187,7 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative bg-zinc-950 border border-zinc-900 p-12 md:p-16 flex flex-col items-center justify-center text-center rounded-[3rem] overflow-hidden group"
+            className="relative bg-zinc-950 border border-zinc-900 p-8 md:p-16 flex flex-col items-center justify-center text-center rounded-[3rem] overflow-hidden group"
           >
             <span className="absolute top-8 left-12 font-mono text-zinc-800 text-sm tracking-widest group-hover:text-yellow-400 transition-colors">01</span>
             <div className="space-y-6 relative z-10">
@@ -205,7 +205,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative bg-yellow-950/20 border border-yellow-400/10 p-12 md:p-16 flex flex-col items-center justify-center text-center rounded-[3rem] overflow-hidden group shadow-[inset_0_0_80px_-20px_rgba(250,204,21,0.05)]"
+            className="relative bg-yellow-950/20 border border-yellow-400/10 p-8 md:p-16 flex flex-col items-center justify-center text-center rounded-[3rem] overflow-hidden group shadow-[inset_0_0_80px_-20px_rgba(250,204,21,0.05)]"
           >
             <span className="absolute top-8 left-12 font-mono text-yellow-400/20 text-sm tracking-widest group-hover:text-yellow-400 transition-colors">02</span>
             <div className="space-y-6 relative z-10">
@@ -306,7 +306,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
     <div className="border-b border-zinc-800">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-8 flex items-center justify-between text-left group"
+        className="w-full py-6 md:py-8 flex items-center justify-between text-left group"
       >
         <span className={`text-lg md:text-xl font-bold tracking-tight transition-colors ${isOpen ? 'text-yellow-400' : 'text-white'}`}>
           {question}
