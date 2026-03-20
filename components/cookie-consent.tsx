@@ -44,14 +44,14 @@ export function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-12 md:max-w-md z-[100]"
+          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-12 md:max-w-md z-100"
         >
-          <div className="bg-zinc-950/80 backdrop-blur-xl border border-white/10 p-6 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          <div className="bg-zinc-950/80 backdrop-blur-xl border border-white/10 p-6 rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
             {/* Animated Glow Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 blur-[60px] -mr-16 -mt-16 group-hover:bg-yellow-400/10 transition-colors duration-500" />
 
             <div className="relative flex items-start gap-5">
-              <div className="flex-shrink-0 w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
+              <div className="shrink-0 w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
                 <Shield className="w-6 h-6 text-yellow-400" strokeWidth={1.5} />
               </div>
               

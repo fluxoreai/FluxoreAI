@@ -19,7 +19,7 @@ export const ContactForm = () => {
     const fetchMap = async () => {
       try {
         const response = await mapsApi.getPin({ 
-          address: "Palo Alto, California", // Address matching the UI text
+          address: "2829 Newell St #5, Los Angeles, CA 90039, United States", // Address matching the UI text
           zoom: 13
         });
         if (mounted && response.data?.embed_url) {
@@ -92,7 +92,7 @@ export const ContactForm = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors placeholder:text-zinc-700"
-              placeholder="elon@spacex.com"
+              placeholder="help@fluxoreai.com"
             />
           </div>
           <div className="space-y-1">
@@ -140,7 +140,7 @@ export const ContactForm = () => {
             </div>
             <div className="text-center">
               <p className="text-white font-mono text-xs uppercase tracking-widest">Headquarters</p>
-              <p className="text-zinc-500 text-sm">Palo Alto, California</p>
+              <p className="text-zinc-500 text-sm">2829 Newell St #5, Los Angeles, CA 90039, United States</p>
             </div>
           </div>
         </div>

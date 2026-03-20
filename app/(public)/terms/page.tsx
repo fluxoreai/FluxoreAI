@@ -79,7 +79,7 @@ export default function TermsPage() {
               <p className="text-zinc-500 text-sm">Contact our legal department for technical clarifications.</p>
             </div>
             <button className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-yellow-400 transition-all uppercase text-xs tracking-widest">
-              legal@fluxore.ai
+              help@fluxoreai.com
             </button>
           </div>
         </section>

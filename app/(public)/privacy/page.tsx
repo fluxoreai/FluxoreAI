@@ -84,6 +84,31 @@ export default function PrivacyPage() {
           </div>
         </section>
 
+        {/* Contact info section */}
+        <section className="pt-12 border-t border-zinc-900 space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-white uppercase tracking-tight">Contact Us</h2>
+            <p className="text-zinc-400 leading-relaxed font-light">
+              If you have any questions about this Privacy Policy, your personal data, or our security protocols, please reach out to our team.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Email_Endpoint</h3>
+              <p className="text-white font-medium">help@fluxoreai.com</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Voice_Channel</h3>
+              <p className="text-white font-medium">+1 323-672-2885</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Physical_Node</h3>
+              <p className="text-white font-medium">2829 Newell St #5, Los Angeles, CA 90039</p>
+            </div>
+          </div>
+        </section>
+
       </div>
     </main>
   );

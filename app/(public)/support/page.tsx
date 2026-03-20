@@ -31,7 +31,7 @@ function InfrastructureMap() {
     const fetchMap = async () => {
       try {
         const response = await mapsApi.getPin({
-          address: "123 Main Street, New York, NY 10001",
+          address: "2829 Newell St #5, Los Angeles, CA 90039, United States",
           zoom: 15
         });
         if (mounted && response.data?.embed_url) {
@@ -515,6 +515,22 @@ export default function SupportPage() {
               </div>
               <span className="text-green-500 uppercase tracking-widest font-medium">All Systems Operational</span>
             </div>
+          </div>
+        </section>
+
+        {/* Direct Comms */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-b border-zinc-900 border-dashed">
+          <div className="space-y-2 group">
+            <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.2em] group-hover:text-yellow-400 transition-colors duration-500">Email_Endpoint</h3>
+            <p className="text-white font-black tracking-tight text-lg">help@fluxoreai.com</p>
+          </div>
+          <div className="space-y-2 group">
+            <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.2em] group-hover:text-yellow-400 transition-colors duration-500">Voice_Channel</h3>
+            <p className="text-white font-black tracking-tight text-lg">+1 323-672-2885</p>
+          </div>
+          <div className="space-y-2 group">
+            <h3 className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.2em] group-hover:text-yellow-400 transition-colors duration-500">Physical_Node</h3>
+            <p className="text-white font-black tracking-tight text-lg">Los Angeles, CA // USA</p>
           </div>
         </section>
 

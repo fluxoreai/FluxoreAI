@@ -294,7 +294,7 @@ function CheckoutContent() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Street Address</label>
-                    <input required type="text" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="123 Main St" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                    <input required type="text" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="2829 Newell St #5" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -311,7 +311,7 @@ function CheckoutContent() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">ZIP / Postal Code</label>
-                      <input required type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="10001" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
+                      <input required type="text" value={zip} onChange={(e) => setZip(e.target.value)} placeholder="90039" className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-yellow-400 transition-colors text-white" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest px-1">Country</label>
