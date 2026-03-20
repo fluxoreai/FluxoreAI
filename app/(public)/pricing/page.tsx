@@ -8,46 +8,82 @@ import { Check, Info, Users, Zap, Clock } from 'lucide-react';
 import { paymentsApi } from '@/lib/api/payments';
 
 
-const fallbackPricingPlans = [
+interface RawPlan {
+  id: number | string;
+  slug: string;
+  name: string;
+  price: number | string;
+  description: string;
+  features: string[];
+  currency: string;
+  interval: string;
+  is_active: boolean;
+  is_popular?: boolean;
+}
+
+const fallbackPricingPlans: RawPlan[] = [
   {
     id: 1,
-    slug: "basic-flow",
+    slug: "basic",
     name: "Basic Flow",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
+    price: 0,
     description: "For individuals and small teams exploring smarter workflows.",
     features: ["5 Workflow Insights/mo", "Basic Workflow Analytics", "1 Tool Integration", "Community Support"],
-    style: "bg-zinc-900 border-zinc-800",
-    buttonStyle: "bg-zinc-800 text-white hover:bg-zinc-700",
-    popular: false
+    currency: "USD",
+    interval: "month",
+    is_active: true
   },
   {
     id: 2,
-    slug: "pulse-pro",
-    name: "Pulse Pro",
-    monthlyPrice: 49,
-    yearlyPrice: 39,
+    slug: "pro",
+    name: "Studio",
+    price: 49,
     description: "Powerful workflow intelligence for growing teams.",
     features: ["Unlimited Workflow Insights", "Advanced Workflow Analytics", "Up to 15 Tool Integrations", "AI Workflow Optimization", "Priority Support"],
-    style: "bg-black border-yellow-400/50 shadow-[0_0_30px_rgba(250,204,21,0.15)]",
-    buttonStyle: "bg-yellow-400 text-black hover:bg-yellow-300",
-    popular: true
+    currency: "USD",
+    interval: "month",
+    is_active: true,
+    is_popular: true
   },
   {
     id: 3,
-    slug: "enterprise-flux",
+    slug: "enterprise",
     name: "Enterprise Flux",
-    monthlyPrice: "Custom",
-    yearlyPrice: "Custom",
+    price: "Custom",
     description: "Advanced workflow intelligence for large organizations.",
     features: ["Unlimited Workflow Monitoring", "Custom AI Optimization Models", "Unlimited Integrations", "Enterprise Security & Compliance", "Dedicated Customer Success Manager", "Private or On-Premise Deployment"],
-    style: "bg-zinc-900 border-zinc-800",
-    buttonStyle: "bg-zinc-800 text-white hover:bg-zinc-700",
-    popular: false
+    currency: "USD",
+    interval: "month",
+    is_active: true
   }
 ];
 
-export type PricingPlan = typeof fallbackPricingPlans[0];
+export interface PricingPlan extends RawPlan {
+  monthlyPrice: number | string;
+  yearlyPrice: number | string;
+  style: string;
+  buttonStyle: string;
+  popular: boolean;
+}
+
+const mapPlanToUI = (p: any): PricingPlan => {
+  const isPopular = p.is_popular || p.slug === 'pro';
+  const price = p.price === 'Custom' ? 'Custom' : parseFloat(p.price);
+  
+  return {
+    ...p,
+    id: p.id || p.slug, // Ensure we have an ID for links
+    monthlyPrice: price,
+    yearlyPrice: typeof price === 'number' ? Math.round(price * 0.8) : 'Custom',
+    style: isPopular
+      ? "bg-black border-yellow-400/50 shadow-[0_0_30px_rgba(250,204,21,0.15)]"
+      : "bg-zinc-900 border-zinc-800",
+    buttonStyle: isPopular
+      ? "bg-yellow-400 text-black hover:bg-yellow-300"
+      : "bg-zinc-800 text-white hover:bg-zinc-700",
+    popular: isPopular
+  };
+};
 
 const faqs = [
   {
@@ -178,7 +214,7 @@ function ROICalculator() {
 
 export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false);
-  const [plans, setPlans] = useState<PricingPlan[]>(fallbackPricingPlans);
+  const [plans, setPlans] = useState<PricingPlan[]>(fallbackPricingPlans.map(mapPlanToUI));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -187,28 +223,11 @@ export default function PricingPage() {
       try {
         const response = await paymentsApi.getSubscriptionPlans();
         if (mounted && response.data && response.data.length > 0) {
-          // Map backend plans back into the UI format
-          const mappedPlans: PricingPlan[] = response.data.map((p: any) => ({
-            id: p.id,
-            slug: p.slug,
-            name: p.name,
-            monthlyPrice: p.price_monthly === 'Custom' ? 'Custom' : parseFloat(p.price_monthly),
-            yearlyPrice: p.price_yearly === 'Custom' ? 'Custom' : parseFloat(p.price_yearly),
-            description: p.description || "Powerful features for your scale.",
-            features: p.features || ["Standard features"],
-            style: p.is_popular
-              ? "bg-black border-yellow-400/50 shadow-[0_0_30px_rgba(250,204,21,0.15)]"
-              : "bg-zinc-900 border-zinc-800",
-            buttonStyle: p.is_popular
-              ? "bg-yellow-400 text-black hover:bg-yellow-300"
-              : "bg-zinc-800 text-white hover:bg-zinc-700",
-            popular: p.is_popular
-          }));
+          const mappedPlans: PricingPlan[] = response.data.map(mapPlanToUI);
           setPlans(mappedPlans);
         }
       } catch (error) {
         console.warn('Failed to load pricing plans from API. Using fallbacks.', error);
-        // Fallback is already set in initial state
       } finally {
         if (mounted) setLoading(false);
       }
