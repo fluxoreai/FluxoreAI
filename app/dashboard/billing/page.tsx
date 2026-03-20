@@ -6,7 +6,7 @@ import { CreditCard, Zap, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { authApi } from '@/lib/api/auth';
 import { paymentsApi } from '@/lib/api/payments';
 import Link from 'next/link';
-import { PricingPlan } from '@/app/(public)/pricing/page';
+import { PricingPlan, mapPlanToUI } from '@/app/(public)/pricing/page';
 
 export default function BillingPage() {
   const [loading, setLoading] = useState(true);
@@ -29,12 +29,7 @@ export default function BillingPage() {
         // Fetch plans to map against user's plan _id/slug
         const planResp = await paymentsApi.getSubscriptionPlans();
         if (mounted && planResp?.data) {
-          setPlans(planResp.data.map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            monthlyPrice: parseFloat(p.price || p.price_monthly || "0"),
-            features: p.features || []
-          })));
+          setPlans(planResp.data.map(mapPlanToUI));
         }
 
         // Fetch real billing history

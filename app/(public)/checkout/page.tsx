@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { authApi } from '@/lib/api/auth';
 import { paymentsApi } from '@/lib/api/payments';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { PricingPlan } from '../pricing/page';
+import { PricingPlan, mapPlanToUI } from '../pricing/page';
 
 function CheckoutContent() {
   const router = useRouter();
@@ -54,20 +54,12 @@ function CheckoutContent() {
         if (planId) {
           const resp = await paymentsApi.getSubscriptionPlans();
           if (resp?.data) {
-            const foundPlan = resp.data.find((p: any) => p.id.toString() === planId);
+            // Find plan by ID or Slug for better compatibility
+            const foundPlan = resp.data.find((p: any) => 
+              p.id?.toString() === planId || p.slug === planId
+            );
             if (foundPlan) {
-              setPlanDetails({
-                id: foundPlan.id,
-                slug: foundPlan.slug,
-                name: foundPlan.name,
-                monthlyPrice: parseFloat(foundPlan.price_monthly),
-                yearlyPrice: parseFloat(foundPlan.price_yearly),
-                description: foundPlan.description,
-                features: foundPlan.features || [],
-                style: '',
-                buttonStyle: '',
-                popular: foundPlan.is_popular
-              });
+              setPlanDetails(mapPlanToUI(foundPlan));
             } else {
               setError("Plan not found. Please reselect from the pricing page.");
             }

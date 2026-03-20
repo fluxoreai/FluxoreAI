@@ -66,7 +66,7 @@ export interface PricingPlan extends RawPlan {
   popular: boolean;
 }
 
-const mapPlanToUI = (p: any): PricingPlan => {
+export const mapPlanToUI = (p: any): PricingPlan => {
   const isPopular = p.is_popular || p.slug === 'pro';
   const price = p.price === 'Custom' ? 'Custom' : parseFloat(p.price);
   

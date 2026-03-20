@@ -283,11 +283,14 @@ function SupportAIChat() {
 
     try {
       const response = await aiApi.generate({ prompt: text });
-      if (response.data?.response) {
+      // Support both new nested structure and legacy flat structure
+      const aiContent = response.data?.choices?.[0]?.message?.content || response.data?.response;
+      
+      if (aiContent) {
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: response.data.response,
+          content: aiContent,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, aiMessage]);

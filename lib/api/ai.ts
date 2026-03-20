@@ -9,12 +9,19 @@ export interface AiGenerateRequest {
 }
 
 export interface AiGenerateResponse {
-  id: number;
+  id: string | number;
   model: string;
   prompt?: string;
-  response: string;
+  response?: string; // Legacy/Fallback
+  choices?: {
+    message: {
+      role: string;
+      content: string;
+    };
+    finish_reason: string;
+  }[];
   status: string;
-  tokens_used: number;
+  tokens_used?: number;
 }
 
 export const aiApi = {
