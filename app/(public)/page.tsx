@@ -284,7 +284,7 @@ export default function Home() {
 
               <div className="flex flex-col items-center gap-4">
                 <Link href={"/pricing"}>
-                  <button className="bg-yellow-400 text-black px-12 py-5 rounded-full text-lg font-black uppercase tracking-widest hover:bg-yellow-300 transition-all hover:scale-105 shadow-[0_0_30px_rgba(250,204,21,0.2)]">
+                  <button className="bg-yellow-400 text-black px-12 py-5 rounded-full text-md sm:text-lg font-black uppercase tracking-widest hover:bg-yellow-300 transition-all hover:scale-105 shadow-[0_0_30px_rgba(250,204,21,0.2)]">
                     Start Free Trial
                   </button>
                 </Link>

@@ -68,7 +68,7 @@ export const Footer = () => {
                   href: 'https://www.youtube.com/@FluxoreAI'
                 }].map((i, index) => (
                   <div key={index} className="group flex items-center justify-center hover:border-yellow-400  transition-all cursor-pointer">
-                    <Link href={i.href}>
+                    <Link href={i.href} target="_blank" rel="noopener noreferrer">
                       <div className="flex flex-col space-y-2 items-center justify-center" >
                         <i.icon className="w-7 h-7 md:w-7 md:h-7 text-zinc-700 group-hover:text-yellow-400" />
                         {/* link name in small letters at the bottom withh hover color change in group */}
