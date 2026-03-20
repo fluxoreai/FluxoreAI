@@ -8,7 +8,7 @@ export const Footer = () => {
   return (
     <footer className="bg-black border-t border-zinc-900 pt-12 md:pt-20 pb-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
           {/* Column 1 - Brand */}
           <div className="col-span-2 md:col-span-1 space-y-4 md:space-y-6">
             <Link href="/" className="flex items-center group">
@@ -41,9 +41,20 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
+          </div>          {/* Column 3 - Presence */}
+          <div className="col-span-1">
+            <h4 className="text-white font-semibold mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-widest">Presence</h4>
+            <ul className="space-y-3 md:space-y-4">
+              {[
+                { name: 'F6S', href: 'https://www.f6s.com/fluxoreai' },
+                { name: 'Crunchbase', href: 'https://www.crunchbase.com/organization/fluxoreai' }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-yellow-400 transition-colors text-xs md:text-sm">{item.name}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
-
-
 
           {/* Column 4 - Connect */}
           <div className="col-span-1 md:col-span-1">
