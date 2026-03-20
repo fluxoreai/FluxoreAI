@@ -8,8 +8,8 @@ export const Footer = () => {
   return (
     <footer className="bg-black border-t border-zinc-900 pt-12 md:pt-20 pb-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
-          {/* Column 1 - Brand (Full width on very small screens) */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-20">
+          {/* Column 1 - Brand */}
           <div className="col-span-2 md:col-span-1 space-y-4 md:space-y-6">
             <Link href="/" className="flex items-center group">
               <div className="relative w-12 h-12 transform group-hover:scale-110 transition-transform duration-500">
@@ -28,10 +28,10 @@ export const Footer = () => {
 
           {/* Column 2 - Engine */}
           <div className="col-span-1">
-            <h4 className="text-white font-semibold mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-widest">Engine</h4>
+            <h4 className="text-white font-semibold mb-4 md:mb-6 text-xs md:text-sm uppercase tracking-widest">Company</h4>
             <ul className="space-y-3 md:space-y-4">
               {[
-                { name: 'Engine', href: '/engine' },
+                { name: 'Blog', href: '/blog' },
                 { name: 'Pricing', href: '/pricing' },
                 { name: 'About', href: '/about' },
                 { name: 'Support', href: '/support' }
@@ -43,22 +43,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3 - Resources (Hidden on mobile to reduce clutter) */}
-          <div className="hidden md:block col-span-1">
-            <h4 className="text-white font-semibold mb-6 text-sm uppercase tracking-widest">Resources</h4>
-            <ul className="space-y-4">
-              {[
-                { name: 'Blog', href: '/blog' },
-                { name: 'Documentation', href: '#' },
-                { name: 'API Reference', href: '#' },
-                { name: 'Join Discord', href: '#' }
-              ].map((item) => (
-                <li key={item.name}>
-                  <Link href={item.href} className="text-zinc-500 hover:text-yellow-400 transition-colors text-sm">{item.name}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+
 
           {/* Column 4 - Connect */}
           <div className="col-span-1 md:col-span-1">
