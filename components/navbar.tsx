@@ -53,7 +53,9 @@ export const Navbar = () => {
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/' 
+              ? pathname === '/' 
+              : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.name}
@@ -113,7 +115,9 @@ export const Navbar = () => {
           >
             <div className="flex flex-col space-y-6">
               {navLinks.map((item, i) => {
-                const isActive = pathname === item.href;
+                const isActive = item.href === '/' 
+                  ? pathname === '/' 
+                  : pathname.startsWith(item.href);
                 return (
                   <motion.div
                     key={item.name}
