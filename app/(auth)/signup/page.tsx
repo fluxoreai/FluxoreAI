@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api/auth';
 import { API_URL } from '@/lib/api-client';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { getErrorMessage } from '@/lib/utils';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -72,7 +73,7 @@ export default function SignupPage() {
       });
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Signup failed');
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

@@ -21,6 +21,7 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { authApi } from '@/lib/api/auth';
 import { API_URL } from '@/lib/api-client';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { getErrorMessage } from '@/lib/utils';
 
 const logMessages = [
   'Node #402 Authenticated...',
@@ -74,7 +75,7 @@ export default function LoginPage() {
       await authApi.login({ email, password_hash: password, turnstile_token });
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
