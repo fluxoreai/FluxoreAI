@@ -58,7 +58,7 @@ export const Navbar = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative py-2 text-sm font-medium transition-colors ${isActive ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+                className={`relative py-2 text-sm transition-colors ${isActive ? 'text-yellow-400 font-black' : 'text-zinc-400 font-medium hover:text-white'}`}
               >
                 {item.name}
                 {isActive && (
@@ -77,9 +77,7 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center space-x-6">
           {!isLoggedIn ? (
             <>
-              <Link href="/login" className="text-zinc-400 hover:text-white transition-colors text-sm font-medium">
-                Sign In
-              </Link>
+
               <Link href="/engine">
                 <button className="bg-yellow-400 hover:bg-yellow-300 text-black px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:shadow-[0_0_20px_-5px_rgba(250,204,21,0.5)] active:scale-95">
                   Get Started
@@ -126,7 +124,7 @@ export const Navbar = () => {
                     <Link
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`text-3xl font-bold transition-colors flex items-center gap-4 ${isActive ? 'text-yellow-400' : 'text-white hover:text-yellow-400'}`}
+                      className={`text-3xl font-black italic transition-colors flex items-center gap-4 ${isActive ? 'text-yellow-400' : 'text-white hover:text-yellow-400'}`}
                     >
                       {item.name}
                       {isActive && <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />}
@@ -139,13 +137,7 @@ export const Navbar = () => {
             <div className="mt-auto mb-12 flex flex-col space-y-4">
               {!isLoggedIn ? (
                 <>
-                  <Link
-                    href="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full py-4 text-center text-zinc-400 font-medium"
-                  >
-                    Sign In
-                  </Link>
+
                   <Link
                     href="/engine"
                     onClick={() => setIsMobileMenuOpen(false)}

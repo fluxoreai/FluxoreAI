@@ -465,6 +465,19 @@ function SupportAIChat() {
    MAIN PAGE COMPONENT
    ────────────────────────────────────────────────────────────────────────── */
 export default function SupportPage() {
+  useEffect(() => {
+    // Handle active scroll to hash on load
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 800); // Delay to allow layout to settle
+      }
+    }
+  }, []);
+
   return (
     <main className="bg-black text-white min-h-screen pt-32 pb-12 px-6 md:px-24 selection:bg-yellow-400 selection:text-black overflow-x-hidden relative">
 
@@ -535,7 +548,7 @@ export default function SupportPage() {
         </section>
 
         {/* AI Chat Command Palette */}
-        <section>
+        <section id="chat">
           <SupportAIChat />
         </section>
 

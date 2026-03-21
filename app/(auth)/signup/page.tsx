@@ -39,7 +39,16 @@ export default function SignupPage() {
   };
 
   const strength = calculateStrength(password);
-
+  
+  const hashPassword = async (pass: string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(pass);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  };
+  
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!executeRecaptcha) {
@@ -52,11 +61,13 @@ export default function SignupPage() {
 
     try {
       const turnstile_token = await executeRecaptcha('signup');
+      const password_hash = await hashPassword(password);
+      
       await authApi.register({ 
         username,
         email, 
-        password_hash: password, 
-        password_hash_confirmation: password,
+        password_hash, 
+        password_hash_confirmation: password_hash,
         turnstile_token 
       });
       router.push('/dashboard');

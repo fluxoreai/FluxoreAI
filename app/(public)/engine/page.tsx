@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { Zap, Shield, Share2, Workflow, Activity } from 'lucide-react';
+import { Zap, Shield, Share2, Workflow, Activity, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 /* ────────────────────────────────────────────
    DATA
@@ -254,6 +255,19 @@ export default function EnginePage() {
               The heartbeat of autonomous infrastructure
             </p>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Link href="/dashboard">
+              <button className="bg-yellow-400 hover:bg-yellow-300 text-black px-8 py-4 rounded-full text-sm font-black uppercase tracking-widest transition-all hover:shadow-[0_0_40px_rgba(250,204,21,0.4)] active:scale-95 flex items-center gap-3 group">
+                Go to Dashboard
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </Link>
+          </motion.div>
 
           {/* Scroll indicator */}
           <motion.div
