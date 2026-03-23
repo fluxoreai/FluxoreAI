@@ -16,8 +16,16 @@ import {
   Search,
   Server,
   CreditCard,
-  LogOut
+  LogOut,
+  Menu
 } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AuthGuard from '@/components/auth-guard';
 import { authApi } from '@/lib/api/auth';
@@ -41,6 +49,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const [userProfile, setUserProfile] = React.useState<any>(null);
   const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -121,8 +130,64 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="grow flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
-        <header className="h-16 border-b border-zinc-800 flex items-center justify-between px-8 bg-black/50 backdrop-blur-md sticky top-0 z-20">
+        <header className="h-16 border-b border-zinc-800 flex items-center justify-between px-4 md:px-8 bg-black/50 backdrop-blur-md sticky top-0 z-20">
           <div className="flex items-center space-x-4">
+            {/* Mobile Menu Trigger */}
+            <div className="md:hidden">
+              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <button className="p-2 text-zinc-400 hover:text-white transition-colors">
+                    <Menu className="w-6 h-6" />
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="left" className="bg-black border-zinc-800 p-0 w-72">
+                  <SheetHeader className="p-6 border-b border-zinc-800 text-left">
+                    <SheetTitle>
+                      <Link href="/" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Image
+                          src="/logo/logo.webp"
+                          alt="FluxoreAI Logo"
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
+                      </Link>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <nav className="p-4 space-y-2 pt-8">
+                    {navItems.map((item) => {
+                      const isActive = pathname === item.href;
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                            isActive 
+                              ? 'bg-yellow-400 text-black font-semibold' 
+                              : 'text-zinc-500 hover:bg-zinc-900 hover:text-white'
+                          }`}
+                        >
+                          <item.icon className="w-5 h-5" />
+                          <span>{item.name}</span>
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-800 bg-black">
+                    <div className="bg-zinc-900/50 rounded-2xl p-4 border border-zinc-800">
+                      <p className="text-[10px] font-mono text-zinc-500 uppercase mb-2">System Capacity</p>
+                      <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-yellow-400 w-[72%]" />
+                      </div>
+                      <p className="text-right text-[10px] text-yellow-400 mt-1 font-mono">72%</p>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+
             <div className="flex items-center text-zinc-500 text-sm space-x-2">
               <span>Platform</span>
               <ChevronRight className="w-4 h-4" />
